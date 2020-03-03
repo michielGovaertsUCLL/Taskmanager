@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <title>taakmanager voor beginners</title>
+</head>
+<body>
+<p th:if="${task} == null">Task not found</p>
+<div th:unless="${task} == null">
+    <p th:text="*{task.title}"></p>
+    <p th:text="*{task.description}"></p>
+    <p th:text="*{task.dueDateTime}"></p>
+</div>
+</body>
+</html>

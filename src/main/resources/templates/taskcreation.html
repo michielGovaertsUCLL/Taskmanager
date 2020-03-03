@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <title>taakmanager voor beginners</title>
+</head>
+<body>
+    <form action="/tasks/new"  method="POST">
+        <label th:for="title">title</label>
+        <input th:id="title" th:name="title" th:type="text">
+        <label th:for="description">description</label>
+        <input th:id="description" th:name="description" th:type="text">
+        <label th:for="dueDate">due date</label>
+        <input th:id="dueDate" th:name="dueDate" th:type="text">
+
+        <input th:id="submit" th:name="submit" th:type="submit" th:value="submit">
+    </form>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <title>taakmanager voor beginners</title>
+</head>
+<body>
+<a href="/tasks/new">create new task</a>
+<table th:unless="${tasks.size() == 0}">
+    <thead>
+        <tr>
+            <th>naam</th>
+            <th>tijd</th>
+            <th>link</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="task : ${tasks}">
+            <td th:text="*{task.title}"></td>
+            <td th:text="*{task.dueDateTime}"></td>
+            <td><a th:href="@{/tasks/{id}(id=*{task.id})}" th:text="*{task.id}"></a></td>
+        </tr>
+    </tbody>
+</table>
+<p th:if="${tasks.size() == 0}">No tasks left to do</p>
+</body>
+</html>
