@@ -1,5 +1,6 @@
 package be.ucll.taskmanager.service;
 
+import be.ucll.taskmanager.DTO.TaskDTO;
 import be.ucll.taskmanager.domain.Task;
 import be.ucll.taskmanager.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import java.util.*;
 @Service
 public class TaskService {
 
+    @Autowired
     private final TaskRepository repository;
 
     public TaskService(){
@@ -29,11 +31,18 @@ public class TaskService {
                 return t;
             }
         }
-        return null;
+        throw new NullPointerException("no task with this id");
     }
 
     //adds a new task to the repository
     public void addTask(Task task) {
         repository.addTask(task);
+    }
+
+    public void editTask(int id, TaskDTO task) {
+        Task t =  getTask(id);
+        t.setTitle(task.title);
+        t.setDescription(task.description);
+        t.setDueDateTime(task.dueDateTime);
     }
 }

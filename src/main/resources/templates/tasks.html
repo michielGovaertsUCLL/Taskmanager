@@ -7,6 +7,7 @@
 </head>
 <body>
 <a href="/tasks/new">create new task</a>
+
 <table th:unless="${tasks.size() == 0}">
     <thead>
         <tr>
@@ -19,7 +20,8 @@
         <tr th:each="task : ${tasks}">
             <td th:text="*{task.title}"></td>
             <td th:text="*{task.dueDateTime}"></td>
-            <td><a th:href="@{/tasks/{id}(id=*{task.id})}" th:text="*{task.id}"></a></td>
+            <td><a th:href="@{/tasks/edit/{id}(id=*{task.id})}" th:text="edit"></a></td>
+            <td><a th:href="@{/tasks/{id}(id=*{task.id})}" th:text="details"></a></td>
         </tr>
     </tbody>
 </table>
