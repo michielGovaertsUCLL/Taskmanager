@@ -6,15 +6,15 @@
     <title>taakmanager voor beginners</title>
 </head>
 <body>
-    <form action="/tasks/new"  method="POST">
-        <label th:for="title">title</label>
-        <input th:id="title" th:name="title" th:type="text">
-        <label th:for="description">description</label>
-        <input th:id="description" th:name="description" th:type="text">
-        <label th:for="dueDate">due date</label>
-        <input th:id="dueDate" th:name="dueDate" th:type="text">
+    <form action="/tasks/new"  method="POST" th:object="${Task}">
 
-        <input th:id="submit" th:name="submit" th:type="submit" th:value="submit">
+        <label for="title">title</label>
+        <input id="title" name="title" type="text" th:field="*{title}">
+        <label for="description">description</label>
+        <input id="description" name="description" type="text" th:field="*{description}">
+        <label for="dueDate">due date</label>
+        <input id="dueDate" name="dueDate" type="datetime-local" th:field="*{dueDateTime}">
+        <input id="submit" name="submit" type="submit" value="submit">
     </form>
 </body>
 </html>

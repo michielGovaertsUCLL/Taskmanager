@@ -1,52 +1,57 @@
 package be.ucll.taskmanager.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Component;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
+@Component
 public class Task {
+    // sequential id
     private static final AtomicInteger count = new AtomicInteger(-1);
     private final int id;
-    private String title;
-    private String description;
-    private LocalDateTime dueDateTime;
 
-    public Task(String title, String description, int year, int month, int day, int hour) {
-        setTitle(title);
-        setDueDateTime(year, month, day, hour, 0);
+    //title not blank, not null and minimum length of 3
+    @Size(min = 3)
+    @NotBlank
+    public String title;
+
+    //description not blank, not null and minimum length of 8
+    @Size(min = 8)
+    @NotBlank
+    public String description;
+
+    //date and time when the task should be completed (in ISO standard)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    public LocalDateTime dueDateTime;
+
+    //empty constructor for spring
+    public Task() {
         this.id = count.incrementAndGet();
-        setDescription(description);
     }
 
-    private void setDescription(String description) {
-        if(description.isBlank() || description == null || description.isEmpty()) throw new IllegalArgumentException();
+
+
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    private void setTitle(String title) {
-        if(title.isBlank() || title == null || title.isEmpty()) throw new IllegalArgumentException();
-        else this.title = title;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    private void setDueDateTime(int year, int month, int day, int hour, int minute) {
-        if(isValidDate(year, month, day) && isValidTime(hour, minute)) this.dueDateTime = LocalDateTime.of(year, month, day, hour, minute);
-        else throw new IllegalArgumentException("invalid date or time");
-    }
-
-    private boolean isValidTime(int hour, int minute) {
-        return hour < 24 && minute < 60;
-    }
-
-    private boolean isValidDate(int year, int month, int day) {
-        return year > 2000 && month < 13 && day < 32;
+    public void setDueDateTime(LocalDateTime dueDateTime) {
+        this.dueDateTime = dueDateTime;
     }
 
 
-    public String getDueDateTime(){
-        //TODO maak mooi
-        String hour = this.dueDateTime.getHour() > 12 ? this.dueDateTime.getHour()-12 + "pm" : this.dueDateTime.getHour() + "am";
-        return "due " + this.dueDateTime.format(DateTimeFormatter.ofPattern("MMMM dd yyyy")).toString() + " at "   + hour;
+    public LocalDateTime getDueDateTime(){
+        return this.dueDateTime;
     }
 
     public String getTitle() {return this.title;}
