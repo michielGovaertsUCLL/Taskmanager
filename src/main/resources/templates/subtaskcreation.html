@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1><a th:text="Home" href="/tasks"></a></h1>
-    <form action="/tasks/new"  method="post" th:object="${task}">
+    <form th:action="@{/tasks/{id}/sub/create(id = ${id})}"  method="post" th:object="${task}">
 
         <p th:text="${#fields.globalErrors()}"></p>
 

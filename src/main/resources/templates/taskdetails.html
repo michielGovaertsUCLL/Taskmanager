@@ -6,11 +6,32 @@
     <title>taakmanager voor beginners</title>
 </head>
 <body>
+<h1><a th:text="Home" href="/tasks"></a></h1>
 <p th:if="${task} == null">Task not found</p>
 <div th:unless="${task} == null">
     <p th:text="*{task.title}"></p>
     <p th:text="*{task.description}"></p>
     <p th:text="*{task.dueDateTime}"></p>
+    <p>subtasks: </p>
+    <table th:unless="${task.subtasks.size() == 0}">
+        <thead>
+        <tr>
+            <th>naam</th>
+            <th>tijd</th>
+            <!--<th>link</th>-->
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task : ${task.subtasks}">
+            <td th:text="*{task.title}"></td>
+            <td th:text="*{task.dueDateTime}"></td>
+            <!--<td><a th:href="@{/tasks/edit/{id}(id=*{task.id})}" th:text="edit"></a></td>
+            <td><a th:href="@{/tasks/{id}(id=*{task.id})}" th:text="details"></a></td>-->
+        </tr>
+        </tbody>
+    </table>
+    <p th:if="${task.subtasks.size() == 0}">No subtasks yet</p>
 </div>
+<p><a th:href="@{/tasks/{id}/sub/create(id=*{task.id})}">create subtask</a></p>
 </body>
 </html>

@@ -22,6 +22,7 @@
             <td th:text="*{task.dueDateTime}"></td>
             <td><a th:href="@{/tasks/edit/{id}(id=*{task.id})}" th:text="edit"></a></td>
             <td><a th:href="@{/tasks/{id}(id=*{task.id})}" th:text="details"></a></td>
+            <td><a th:href="@{/tasks/{id}/sub/create(id=*{task.id})}">create subtask</a></td>
         </tr>
     </tbody>
 </table>
