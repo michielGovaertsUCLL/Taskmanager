@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/tasks")
+@RequestMapping("/")
 public class TaskController {
 
     @Autowired
@@ -21,8 +21,14 @@ public class TaskController {
         this.service = new TaskService();
     }
 
+    @GetMapping()
+    public String getIndex(){
+        return "index";
+    }
+
+
     //homepage which displays all tasks given by the taskservice
-    @GetMapping
+    @GetMapping("/tasks")
     public String getTasks(Model model){
         model.addAttribute("tasks", service.getTasks());
         return "tasks";
@@ -30,21 +36,21 @@ public class TaskController {
 
     //details of a certain task page
     //param: id = task id
-    @GetMapping("/{id}")
+    @GetMapping("/tasks/{id}")
     public String getTaskDetails(Model model, @PathVariable int id){
         model.addAttribute("task", service.getTask(id));
         return "taskdetails";
     }
 
     //go to task creation form page
-    @GetMapping("/new")
+    @GetMapping("/tasks/new")
     public String getTaskForm(Model model){
         model.addAttribute("task", new Task());
         return "taskcreation";
     }
 
     //create new task form submission
-    @PostMapping("/new")
+    @PostMapping("/tasks/new")
     public String createTask(@Valid @ModelAttribute(value = "task") Task task, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
             return "taskcreation";
@@ -56,7 +62,7 @@ public class TaskController {
     //go to edit task form page
     //param: id = task id
     //TODO: this one is close to the same as the task creation page -> merge html and add vars
-    @GetMapping("/edit/{id}")
+    @GetMapping("/tasks/edit/{id}")
     public String getEditForm(Model model, @PathVariable int id){
         model.addAttribute("task", service.getTask(id));
         return "taskedit";
@@ -64,7 +70,7 @@ public class TaskController {
 
     //edit existing task form submission
     //param: id = task id
-    @PostMapping("/edit/{id}")
+    @PostMapping("/tasks/edit/{id}")
     public String editTask(@Valid @ModelAttribute(value = "task") Task task, BindingResult bindingResult, @PathVariable int id, Model model){
         if(bindingResult.hasErrors()){
             return "taskedit";
@@ -75,14 +81,14 @@ public class TaskController {
 
     //go to sub task form page
     //param: id = task id
-    @GetMapping("/{id}/sub/create")
+    @GetMapping("/tasks/{id}/sub/create")
     public String getCreateSubTask(Model model, @PathVariable int id){
         model.addAttribute("id", id);
         model.addAttribute("task", new Task());
         return "subtaskcreation";
     }
 
-    @PostMapping("/{id}/sub/create")
+    @PostMapping("/tasks/{id}/sub/create")
     public String createSubTask(@Valid @ModelAttribute(value = "subtask") Task task, BindingResult bindingResult, @PathVariable int id, Model model) {
         if(bindingResult.hasErrors()){
             return "subtaskcreation";
