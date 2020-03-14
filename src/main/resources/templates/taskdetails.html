@@ -13,7 +13,7 @@
     <p th:text="*{task.description}"></p>
     <p th:text="*{task.dueDateTime}"></p>
     <p>subtasks: </p>
-    <table th:unless="${task.subtasks.size() == 0}">
+    <table th:unless="${task.subtaskDTOs.size() == 0}">
         <thead>
         <tr>
             <th>naam</th>
@@ -22,15 +22,15 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="task : ${task.subtasks}">
-            <td th:text="*{task.title}"></td>
-            <td th:text="*{task.dueDateTime}"></td>
+        <tr th:each="subtask : ${task.subtaskDTOs}">
+            <td th:text="*{subtask.title}"></td>
+            <td th:text="*{subtask.dueDateTime}"></td>
             <!--<td><a th:href="@{/tasks/edit/{id}(id=*{task.id})}" th:text="edit"></a></td>
             <td><a th:href="@{/tasks/{id}(id=*{task.id})}" th:text="details"></a></td>-->
         </tr>
         </tbody>
     </table>
-    <p th:if="${task.subtasks.size() == 0}">No subtasks yet</p>
+    <p th:if="${task.subtaskDTOs.size() == 0}">No subtasks yet</p>
 </div>
 <p><a th:href="@{/tasks/{id}/sub/create(id=*{task.id})}">create subtask</a></p>
 </body>

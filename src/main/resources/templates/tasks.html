@@ -8,7 +8,7 @@
 <body>
 <a href="/tasks/new">create new task</a>
 
-<table th:unless="${tasks.size() == 0}">
+<table th:unless="${tasks.size() == 0 || tasks == null}">
     <thead>
         <tr>
             <th>naam</th>

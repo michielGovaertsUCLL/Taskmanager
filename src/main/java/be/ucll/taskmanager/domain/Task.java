@@ -1,49 +1,57 @@
 package be.ucll.taskmanager.domain;
 
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.stereotype.Component;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 
-@Component
+@Entity
+@Table(name = "TASK")
 public class Task{
     // sequential id
-    private int id;
-    private int subId = 0;
-    public List<Task> subtasks;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "TASK_ID")
+    public Long id;
 
+    //obsolete
+    //private Long subId = 0L;
 
-    //title not blank, not null and minimum length of 3
-    @Size(min = 3, max = 35)
-    @NotBlank
+    @Column(name = "TITLE")
     public String title;
 
-    //description not blank, not null and minimum length of 8
-    @Size(min = 8, max = 100)
-    @NotBlank
+    @Column(name = "DESCRIPTION")
     public String description;
 
-    //date and time when the task should be completed (in ISO standard)
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @Column(name = "DUEDATETIME")
     public LocalDateTime dueDateTime;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_ID")
+    public Task parent;
+
+    @OneToMany(mappedBy = "parent")
+    public List<Task> subtasks;
+
+    //empty constructor initializes subtasks as arraylist
     public Task(){
         this.subtasks = new ArrayList<>();
     }
 
+    //
+    //subtask specific functions
+    //
+
+    //adds subtask
     public void addSubtask(Task t){
-        subId++;
-        t.setId(subId);
         this.subtasks.add(t);
     }
 
-    public Task getSubTask(int id){
-        for(Task t : this.subtasks){
+    //request subtask
+    //TODO: this
+    public Task getSubTask(Long id){
+        for(Task t : this.getSubtasks()){
             if(t.getId()==id){
                 return t;
             }
@@ -51,8 +59,14 @@ public class Task{
         throw new NullPointerException("no task with this id");
     }
 
-    public void removeSubTask(int id){
+    //removes subtask
+    public void removeSubTask(Long id){
         this.subtasks.remove(getSubTask(id));
+    }
+
+    //check if this task is a subtask
+    public boolean hasSubtask() {
+        return this.subtasks.size() != 0;
     }
 
 
@@ -61,37 +75,65 @@ public class Task{
     /// setters and getters
     ///
 
+    public Long getId() {
+        return id;
+    }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setId(Long id) {
+        System.out.println("setID: " + id);
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDateTime getDueDateTime() {
+        return dueDateTime;
+    }
+
     public void setDueDateTime(LocalDateTime dueDateTime) {
         this.dueDateTime = dueDateTime;
     }
 
-    public List<Task> getSubtasks(){
-        return this.subtasks;
+    public Task getParent() {
+        return parent;
     }
 
-    public LocalDateTime getDueDateTime(){
-        return this.dueDateTime;
+    public void setParent(Task parent) {
+        this.parent = parent;
     }
 
-    public String getTitle() {return this.title;}
+    public List<Task> getSubtasks() {
+        return subtasks;
+    }
+
+    public void setSubtasks(List<Task> subtasks) {
+        this.subtasks = subtasks;
+    }
 
 
-    public String getDescription() {return this.description;}
+    //
+    //overrides
+    //
 
-    public int getId() {return this.id;}
-
-    public void setId(int id) {this.id=id;}
-
+    @Override
     public String toString(){
         return this.id + '\n' + this.title + '\n' + this.description + '\n' + this.dueDateTime + '\n' + '\n';
     }
+
+
+
 }

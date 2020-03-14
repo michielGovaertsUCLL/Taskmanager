@@ -1,6 +1,6 @@
 package be.ucll.taskmanager.controller;
 
-import be.ucll.taskmanager.domain.Task;
+import be.ucll.taskmanager.dto.TaskDTO;
 import be.ucll.taskmanager.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,7 +37,7 @@ public class TaskController {
     //details of a certain task page
     //param: id = task id
     @GetMapping("/tasks/{id}")
-    public String getTaskDetails(Model model, @PathVariable int id){
+    public String getTaskDetails(Model model, @PathVariable Long id){
         model.addAttribute("task", service.getTask(id));
         return "taskdetails";
     }
@@ -45,13 +45,13 @@ public class TaskController {
     //go to task creation form page
     @GetMapping("/tasks/new")
     public String getTaskForm(Model model){
-        model.addAttribute("task", new Task());
+        model.addAttribute("task", new TaskDTO());
         return "taskcreation";
     }
 
     //create new task form submission
     @PostMapping("/tasks/new")
-    public String createTask(@Valid @ModelAttribute(value = "task") Task task, BindingResult bindingResult, Model model){
+    public String createTask(@Valid @ModelAttribute(value = "task") TaskDTO task, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
             return "taskcreation";
         }
@@ -63,7 +63,7 @@ public class TaskController {
     //param: id = task id
     //TODO: this one is close to the same as the task creation page -> merge html and add vars
     @GetMapping("/tasks/edit/{id}")
-    public String getEditForm(Model model, @PathVariable int id){
+    public String getEditForm(Model model, @PathVariable Long id){
         model.addAttribute("task", service.getTask(id));
         return "taskedit";
     }
@@ -71,29 +71,29 @@ public class TaskController {
     //edit existing task form submission
     //param: id = task id
     @PostMapping("/tasks/edit/{id}")
-    public String editTask(@Valid @ModelAttribute(value = "task") Task task, BindingResult bindingResult, @PathVariable int id, Model model){
+    public String editTask(@Valid @ModelAttribute(value = "task") TaskDTO task, BindingResult bindingResult, @PathVariable Long id, Model model){
         if(bindingResult.hasErrors()){
             return "taskedit";
         }
-        service.editTask(id, task);
+        service.addTask(task);
         return String.format("redirect:/tasks/%s", id);
     }
 
     //go to sub task form page
     //param: id = task id
     @GetMapping("/tasks/{id}/sub/create")
-    public String getCreateSubTask(Model model, @PathVariable int id){
+    public String getCreateSubTask(Model model, @PathVariable Long id){
         model.addAttribute("id", id);
-        model.addAttribute("task", new Task());
+        model.addAttribute("subtask", new TaskDTO());
         return "subtaskcreation";
     }
 
     @PostMapping("/tasks/{id}/sub/create")
-    public String createSubTask(@Valid @ModelAttribute(value = "subtask") Task task, BindingResult bindingResult, @PathVariable int id, Model model) {
+    public String createSubTask(@Valid @ModelAttribute(value = "subtask") TaskDTO subtask, BindingResult bindingResult, @PathVariable Long id, Model model) {
         if(bindingResult.hasErrors()){
             return "subtaskcreation";
         }
-        service.addSubtask(id, task);
+        service.addSubtask(id, subtask);
         return String.format("redirect:/tasks/%s", id);
     }
 }
