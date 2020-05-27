@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 public interface TaskRepo extends JpaRepository<Task, Long> {
 
@@ -28,10 +30,13 @@ public interface TaskRepo extends JpaRepository<Task, Long> {
     INSERT INTO TASK VALUES (2, 'subtask2', 'desc2', now(), 0);
      */
 
+    @Query(value = "SELECT * FROM TASK WHERE PARENT_ID IS NULL", nativeQuery = true)
+    List<Task> getMainTasks();
+
     @Query(value = "SELECT * FROM TASK WHERE id = ?1 group by due_date_time;", nativeQuery = true)
     void getSubtasks(Long parentId);
 
-    @Query(value = "INSERT INTO TASK VALUES (1, 'Ramesh', 32, 'Ahmedabad', 2000);", nativeQuery = true)
-    void createSubtask(Long parentId);
+    @Query(value = "DELETE TASK WHERE id =?1", nativeQuery = true)
+    void deleteSubtask(Long parentId);
 
 }

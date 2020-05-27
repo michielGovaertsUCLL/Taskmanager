@@ -1,0 +1,17 @@
+#header{
+    padding: 30px;
+    text-align: center;
+    background: #1abc9c;
+    color: white;
+    font-size: 20px;
+    height: 10rem;
+}
+
+.left{
+    float: left;
+    padding-left: 20%;
+}
+
+.right{
+    float: right; padding-right: 20%
+}

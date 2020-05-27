@@ -2,15 +2,26 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-
-    <title>taakmanager voor beginners</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" >
+    <title th:text="#{title}"></title>
 </head>
 <body>
-    <h1>index</h1>
+    <div id="header">
+        <h1>Index</h1>
+        <span th:text="#{lang.change}"></span>:
+        <select id="locales">
+            <option value=""></option>
+            <option value="en" th:text="#{lang.eng}"></option>
+            <option value="nl" th:text="#{lang.nl}"></option>
+        </select>
 
-    <ul>
-        <li><a href="/tasks">task overview</a></li>
-        <li><a href="/tasks/new">new task</a></li>
-    </ul>
+
+        <h2 class="left"><a href="/tasks" th:text="#{link.overview}"></a></h2>
+        <h2 class="right"><a href="/tasks/new" th:text="#{link.new}">new task</a></h2>
+    </div>
+
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+</script>
+<script type="text/javascript" th:src="@{/javascript/locale.js}"></script>
 </html>

@@ -2,36 +2,53 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-
-    <title>taakmanager voor beginners</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" >
+    <title th:text="#{title}"></title>
 </head>
 <body>
-<h1><a th:text="Home" href="/tasks"></a></h1>
-<p th:if="${task} == null">Task not found</p>
+<div id="header">
+    <h1>Index</h1>
+    <span th:text="#{lang.change}"></span>:
+    <select id="locales">
+        <option value=""></option>
+        <option value="en" th:text="#{lang.eng}"></option>
+        <option value="nl" th:text="#{lang.nl}"></option>
+    </select>
+
+
+    <h2 class="left"><a href="/tasks" th:text="#{link.overview}"></a></h2>
+    <h2 class="right"><a href="/tasks/new" th:text="#{link.new}"> </a></h2>
+</div>
+
+<p th:if="${task} == null" th:text="#{task_not_found}"></p>
 <div th:unless="${task} == null">
     <p th:text="*{task.title}"></p>
     <p th:text="*{task.description}"></p>
     <p th:text="*{task.dueDateTime}"></p>
-    <p>subtasks: </p>
+    <p th:text="#{subtasks}"> </p>
     <table th:unless="${task.subtaskDTOs.size() == 0}">
         <thead>
         <tr>
-            <th>naam</th>
-            <th>tijd</th>
-            <!--<th>link</th>-->
+            <th th:text="#{name}"></th>
+            <th th:text="#{time}"></th>
+            <th th:text="#{delete}"></th>
+            <th th:text="#{delete}"></th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="subtask : ${task.subtaskDTOs}">
             <td th:text="*{subtask.title}"></td>
             <td th:text="*{subtask.dueDateTime}"></td>
-            <!--<td><a th:href="@{/tasks/edit/{id}(id=*{task.id})}" th:text="edit"></a></td>
-            <td><a th:href="@{/tasks/{id}(id=*{task.id})}" th:text="details"></a></td>-->
+            <td><a th:href="@{/tasks/{id}/sub/{sub_id}/delete(id=*{task.id}, sub_id=*{subtask.id})}" th:text="#{delete}"></a></td>
         </tr>
         </tbody>
     </table>
-    <p th:if="${task.subtaskDTOs.size() == 0}">No subtasks yet</p>
+    <p th:if="${task.subtaskDTOs.size() == 0}" th:text="#{no_subtasks}">No subtasks yet</p>
 </div>
-<p><a th:href="@{/tasks/{id}/sub/create(id=*{task.id})}">create subtask</a></p>
+<p><a th:method="delete" th:href="@{/tasks/{id}/sub/create(id=*{task.id})}" th:text="#{create_subtask}">create subtask</a></p>
 </body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+</script>
+<script type="text/javascript" th:src="@{/javascript/locale.js}"></script>
 </html>

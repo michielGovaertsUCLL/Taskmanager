@@ -79,6 +79,15 @@ public class TaskController {
         return String.format("redirect:/tasks/%s", id);
     }
 
+    @GetMapping("/tasks/{id}/delete")
+    public String deleteTask(@PathVariable Long id){
+        service.deleteTask(id);
+        return String.format("redirect:/tasks");
+    }
+
+    //TODO delete task
+    //TODO delete subtask
+
     //go to sub task form page
     //param: id = task id
     @GetMapping("/tasks/{id}/sub/create")
@@ -94,6 +103,12 @@ public class TaskController {
             return "subtaskcreation";
         }
         service.addSubtask(id, subtask);
+        return String.format("redirect:/tasks/%s", id);
+    }
+
+    @GetMapping("/tasks/{id}/sub/{sub_id}/delete")
+    public String deleteSubTask(@PathVariable Long id, @PathVariable Long sub_id){
+        service.deleteTask(sub_id);
         return String.format("redirect:/tasks/%s", id);
     }
 }

@@ -6,7 +6,6 @@ import be.ucll.taskmanager.repository.TaskRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
 import java.util.*;
 
 @Service
@@ -20,8 +19,16 @@ public class TaskService {
 
     }
 
+    public List<TaskDTO> getTasks(){
+        List<TaskDTO> dtos = new ArrayList<>();
+        for(Task t : repository.getMainTasks()){
+            dtos.add(taskToDTO(t));
+        }
+        return dtos;
+    }
+
     //returns list with all tasks
-    public List<TaskDTO> getTasks() {
+    public List<TaskDTO> getAllTasks() {
         List<TaskDTO> dtos = new ArrayList<>();
         for (Task t : repository.findAll()) {
             dtos.add(taskToDTO(t));
@@ -42,7 +49,19 @@ public class TaskService {
     }
 
 
+    //delete task from repository
+    public void deleteTask(Long id) {
+        Task t = repository.findById(id).get();
+        if(t.getSubtasks().size() > 0){
+            for(Task st : t.getSubtasks()){
+                repository.delete(st);
+            }
+        }
+        repository.delete(t);
+    }
 
+
+    //adds subtask to task with given id
     public void addSubtask(Long taskId, TaskDTO sub){
         //find and convert tasks
         Task subtask = DTOToTask(sub);
@@ -56,7 +75,6 @@ public class TaskService {
 
         subtask.setId(taskId + task.getSubtasks().size());
 
-        System.out.println(task.getId() + "  \n " + subtask.getId()); //print
 
         //save both tasks to database
         repository.save(subtask);
@@ -64,19 +82,8 @@ public class TaskService {
     }
 
 
-    public void removeSubtask(Long taskId, Long id){
-        repository.delete(getSubTask(taskId, id));
-    }
-
-    public Task getSubTask(Long taskId, Long id){
-        Task mainTask = repository.findById(taskId).get();
-        //TODO
-        return null;
-    }
-
     public TaskDTO taskToDTO(Task t){
         TaskDTO dto = new TaskDTO();
-        System.out.println(t.subtasks.size());
         dto.setId(t.getId());
         dto.setTitle(t.getTitle());
         dto.setDescription(t.getDescription());

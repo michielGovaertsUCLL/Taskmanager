@@ -9,6 +9,7 @@ import java.util.List;
 @Entity
 @Table(name = "TASK")
 public class Task{
+
     // sequential id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

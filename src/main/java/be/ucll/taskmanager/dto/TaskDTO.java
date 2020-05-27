@@ -60,6 +60,7 @@ public class TaskDTO {
     }
 
     public void setTitle(String title) {
+        if(title.length() < 3 || title.length() > 35 || title.isBlank()) throw new IllegalArgumentException("error: bad title");
         this.title = title;
     }
 
@@ -91,5 +92,13 @@ public class TaskDTO {
 
     public void setParent(TaskDTO parent){this.parent = parent;}
 
+
+    //overrides
+    @Override
+    public boolean equals(Object o){
+        if(o == null || !(o instanceof TaskDTO)) return false;
+        TaskDTO taskDTO = (TaskDTO) o;
+        return this.getTitle() == taskDTO.getTitle() && this.getId() == taskDTO.getId();
+    }
 
 }

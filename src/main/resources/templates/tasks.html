@@ -2,17 +2,32 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-
-    <title>taakmanager voor beginners</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" >
+    <title th:text="#{title}"></title>
 </head>
 <body>
-<a href="/tasks/new">create new task</a>
+<div id="header">
+    <h1>Index</h1>
+    <span th:text="#{lang.change}"></span>:
+    <select id="locales">
+        <option value=""></option>
+        <option value="en" th:text="#{lang.eng}"></option>
+        <option value="nl" th:text="#{lang.nl}"></option>
+    </select>
+
+
+    <h2 class="left"><a href="/tasks" th:text="#{link.overview}"></a></h2>
+    <h2 class="right"><a href="/tasks/new" th:text="#{link.new}">new task</a></h2>
+</div>
+
+
+
 
 <table th:unless="${tasks.size() == 0 || tasks == null}">
     <thead>
         <tr>
-            <th>naam</th>
-            <th>tijd</th>
+            <th th:text="#{name}">naam</th>
+            <th th:text="#{time}">tijd</th>
             <th>link</th>
         </tr>
     </thead>
@@ -20,12 +35,17 @@
         <tr th:each="task : ${tasks}">
             <td th:text="*{task.title}"></td>
             <td th:text="*{task.dueDateTime}"></td>
-            <td><a th:href="@{/tasks/edit/{id}(id=*{task.id})}" th:text="edit"></a></td>
-            <td><a th:href="@{/tasks/{id}(id=*{task.id})}" th:text="details"></a></td>
-            <td><a th:href="@{/tasks/{id}/sub/create(id=*{task.id})}">create subtask</a></td>
+            <td><a th:href="@{/tasks/edit/{id}(id=*{task.id})}" th:text="#{edit}"></a></td>
+            <td><a th:href="@{/tasks/{id}(id=*{task.id})}" th:text="#{details}"></a></td>
+            <td><a th:href="@{/tasks/{id}/sub/create(id=*{task.id})}" th:text="#{create_subtask}"></a></td>
+            <td><a th:href="@{/tasks/{id}/delete(id=*{task.id})}" th:text="#{delete}"></a></td>
         </tr>
     </tbody>
 </table>
-<p th:if="${tasks.size() == 0}">No tasks left to do</p>
+<p th:if="${tasks.size() == 0}" th:text="#{no_tasks_left}"></p>
 </body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+</script>
+<script type="text/javascript" th:src="@{/javascript/locale.js}"></script>
 </html>

@@ -2,11 +2,27 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-
-    <title>taakmanager voor beginners</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" >
+    <title th:text="#{title}"></title>
 </head>
 <body>
-<h1><a th:text="Home" href="/tasks"></a></h1>
+<div id="header">
+    <h1>Index</h1>
+    <span th:text="#{lang.change}"></span>:
+    <select id="locales">
+        <option value=""></option>
+        <option value="en" th:text="#{lang.eng}"></option>
+        <option value="nl" th:text="#{lang.nl}"></option>
+    </select>
+
+
+    <h2 class="left"><a href="/tasks" th:text="#{link.overview}"></a></h2>
+    <h2 class="right"><a href="/tasks/new" th:text="#{link.new}">new task</a></h2>
+</div>
+
+
+
+<h1><a th:text="#{link.overview}" href="/tasks"></a></h1>
 
 <form th:object="${task}" th:action="@{/tasks/edit/{id}(id=${task.id})}"  method="post">
 
@@ -14,21 +30,33 @@
     <p th:text="${#fields.globalErrors()}"></p>
 
     <div>
-        <label for="title">title:</label>
+        <label for="title" th:text="#{form.title}">title:</label>
         <input id="title" name="title" type="text" th:field="*{title}">
         <p th:errors="*{title}"></p>
     </div>
     <div>
-        <label for="description">description</label>
+        <label for="description" th:text="#{form.description}">description</label>
         <input id="description" name="description" type="text" th:field="*{description}">
         <p th:errors="*{description}"></p>
     </div>
     <div>
-        <label for="dueDate">due date</label>
+        <label for="dueDate" th:text="#{form.date}">due date</label>
         <input id="dueDate" name="dueDate" type="datetime-local" th:field="*{dueDateTime}">
         <p th:errors="*{dueDateTime}"></p>
     </div>
     <input id="submit" name="submit" type="submit" value="submit">
 </form>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#locales").change(function () {
+            var selectedOption = $('#locales').val();
+            if (selectedOption != ''){
+                window.location.replace('?lang=' + selectedOption);
+            }
+        });
+    });
+</script>
 </html>
